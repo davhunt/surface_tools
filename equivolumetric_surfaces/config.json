@@ -1,5 +1,5 @@
 {
-	"n_surfs": "5",
+	"n_surfs": 5,
 	"subject_id": "bert",
-	"smoothing": "0"
+	"smoothing": 0
 }
