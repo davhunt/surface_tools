@@ -6,7 +6,8 @@ import subprocess
 import argparse
 import os
 import copy
-import sys
+
+
 
 def calculate_area(surfname,fwhm, software="CIVET", subject="fsid",surf="pial",hemi="lh"):
     """calculate and smooth surface area using CIVET or freesurfer"""
@@ -25,6 +26,7 @@ def calculate_area(surfname,fwhm, software="CIVET", subject="fsid",surf="pial",h
             print("depth_potential not found, please install CIVET tools or replace with alternative area calculation/data smoothing")
             return 0;
     if software == "freesurfer":
+        subjects_dir=os.environ['SUBJECTS_DIR']
         if surf == "white":
             areafile=".area"
         elif surf == "pial":
@@ -47,22 +49,40 @@ def calculate_area(surfname,fwhm, software="CIVET", subject="fsid",surf="pial",h
     return area;
    
 
-#parser = argparse.ArgumentParser(description='generate equivolumetric surfaces between input surfaces')
-#parser.add_argument('gray', type=str, help='input gray surface')
-#parser.add_argument('white', type=str, help='input white surface')
-#parser.add_argument('n_surfs', type=int, help='number of output surfaces, also returns gray and white surfaces at 0 and 1')
-#parser.add_argument('output', type=str, help='output surface prefix eg equi_left_{N}')
-#parser.add_argument('--smoothing',type=int, help='fwhm of surface area smoothing. optional, default = 0mm')
-#parser.add_argument('--software', type=str, help='surface software package CIVET or freesurfer, default is CIVET')
-#parser.add_argument('--subject_id', type=str, help='subject name if freesurfer')
-#args=parser.parse_args()
+parser = argparse.ArgumentParser(description='generate equivolumetric surfaces between input surfaces')
+parser.add_argument('gray', type=str, help='input gray surface')
+parser.add_argument('white', type=str, help='input white surface')
+parser.add_argument('n_surfs', type=int, help='number of output surfaces, also returns gray and white surfaces at 0 and 1')
+parser.add_argument('output', type=str, help='output surface prefix eg equi_left_{N}')
+parser.add_argument('--smoothing',type=int, help='fwhm of surface area smoothing. optional, default = 0mm')
+parser.add_argument('--software', type=str, help='surface software package CIVET or freesurfer, default is CIVET')
+parser.add_argument('--subject_id', type=str, help='subject name if freesurfer')
+args=parser.parse_args()
 
 
-subjects_dir=os.environ['SUBJECTS_DIR']
-fwhm=sys.argv[3]
-software= 'freesurfer'
-subject_id=sys.argv[2]
-n_surfs=int(sys.argv[1])
+if args.smoothing:
+    fwhm = args.smoothing
+else:
+    fwhm = 0
+if args.software:
+    software=args.software
+else:
+    software="CIVET"
+
+if args.subject_id:
+    subject_id=args.subject_id
+else:
+    subject_id="fsid"
+
+wm = io.load_mesh_geometry(args.white)
+gm = io.load_mesh_geometry(args.gray)
+
+n_surfs=args.n_surfs
+
+
+wm_vertexareas = calculate_area(args.white, fwhm,software,surf="white", subject=subject_id)
+pia_vertexareas = calculate_area(args.gray, fwhm,software,surf="pial", subject=subject_id)
+
 
 def beta(alpha, aw, ap):
     """Compute euclidean distance fraction, beta, that will yield the desired
@@ -80,31 +100,21 @@ def beta(alpha, aw, ap):
     else:
         return 1-(1 / (ap - aw) * (-aw + np.sqrt((1-alpha)*ap**2 + alpha*aw**2)))
 
-
-for hemisphere in ("rh", "lh"):
-	wm = io.load_mesh_geometry(os.path.join(subjects_dir,subject_id,"surf",hemisphere+".white"))
-	gm = io.load_mesh_geometry(os.path.join(subjects_dir,subject_id,"surf",hemisphere+".pial"))
-
-	wm_vertexareas = calculate_area(os.path.join(subjects_dir,subject_id,"surf",hemisphere+".white"),fwhm,software,surf="white", subject=subject_id)
-	pia_vertexareas = calculate_area(os.path.join(subjects_dir,subject_id,"surf",hemisphere+".pial"), fwhm,software,surf="pial", subject=subject_id)
+vectors= wm['coords'] - gm['coords']
+tmpsurf= copy.deepcopy(gm)
+#create mask where vertex coordinates match
+mask = vectors.sum(axis=1)!=0
 
 
-
-	vectors= wm['coords'] - gm['coords']
-	tmpsurf= copy.deepcopy(gm)
-	#create mask where vertex coordinates match
-	mask = vectors.sum(axis=1)!=0
-
-
-	#number of equally space intracortical surfaces (eg 5 is 0, 0.25, 0.5, 0.75, and 1)
-	for depth in range(n_surfs):
-    		print("creating surface " + str(depth +1))
-    		betas = beta(float(depth)/(n_surfs-1), wm_vertexareas[mask], pia_vertexareas[mask])
-    		betas = np.nan_to_num(betas)
-    		tmpsurf['coords'][mask] = gm['coords'][mask] + vectors[mask]* np.array([betas]).T
-		#    if software == "CIVET":
-		#        io.save_mesh_geometry(args.output+'{}.obj'.format(str(float(depth)/(n_surfs-1))),tmpsurf)
-		#    elif software == "freesurfer":
-    		subjects_dir=os.environ['SUBJECTS_DIR']
-    		tmpsurf['volume_info']=gm['volume_info']
-    		io.save_mesh_geometry(os.path.join(subjects_dir,subject_id,'surf','equi_'+hemisphere+'_{N}'+'{}.pial'.format(str(float(depth)/(n_surfs-1)))),tmpsurf)
+#number of equally space intracortical surfaces (eg 3 is 0.25, 0.5 and 0.75)
+for depth in range(n_surfs):
+    print("creating surface " + str(depth +1))
+    betas = beta(float(depth)/(n_surfs-1), wm_vertexareas[mask], pia_vertexareas[mask])
+    betas = np.nan_to_num(betas)
+    tmpsurf['coords'][mask] = gm['coords'][mask] + vectors[mask]* np.array([betas]).T
+    if software == "CIVET":
+        io.save_mesh_geometry(args.output+'{}.obj'.format(str(float(depth)/(n_surfs-1))),tmpsurf)
+    elif software == "freesurfer":
+        subjects_dir=os.environ['SUBJECTS_DIR']
+        tmpsurf['volume_info']=gm['volume_info']
+        io.save_mesh_geometry(os.path.join(subjects_dir,subject_id,'surf',args.output+'{}.pial'.format(str(float(depth)/(n_surfs-1)))),tmpsurf)
