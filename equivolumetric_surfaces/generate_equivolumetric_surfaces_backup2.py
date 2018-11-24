@@ -8,7 +8,6 @@ import os
 import copy
 import sys
 
-
 def calculate_area(surfname,fwhm, software="CIVET", subject="fsid",surf="pial",hemi="lh"):
     """calculate and smooth surface area using CIVET or freesurfer"""
     tmpdir='/tmp/' + str(np.random.randint(1000))
@@ -62,7 +61,7 @@ def calculate_area(surfname,fwhm, software="CIVET", subject="fsid",surf="pial",h
 subjects_dir=os.environ['SUBJECTS_DIR']
 fwhm=sys.argv[3]
 software= 'freesurfer'
-subject_id=os.path.basename(os.path.normpath(sys.argv[2]))
+subject_id=sys.argv[2]
 n_surfs=int(sys.argv[1])
 
 def beta(alpha, aw, ap):
@@ -86,8 +85,8 @@ for hemisphere in ("rh", "lh"):
 	wm = io.load_mesh_geometry(os.path.join(subjects_dir,subject_id,"surf",hemisphere+".white"))
 	gm = io.load_mesh_geometry(os.path.join(subjects_dir,subject_id,"surf",hemisphere+".pial"))
 
-	wm_vertexareas = calculate_area(os.path.join(subjects_dir,subject_id,"surf",hemisphere+".white"),fwhm,software=software,surf="white", subject=subject_id,hemi=hemisphere)
-	pia_vertexareas = calculate_area(os.path.join(subjects_dir,subject_id,"surf",hemisphere+".pial"), fwhm,software=software,surf="pial", subject=subject_id,hemi=hemisphere)
+	wm_vertexareas = calculate_area(os.path.join(subjects_dir,subject_id,"surf",hemisphere+".white"),fwhm,software,surf="white", subject=subject_id)
+	pia_vertexareas = calculate_area(os.path.join(subjects_dir,subject_id,"surf",hemisphere+".pial"), fwhm,software,surf="pial", subject=subject_id)
 
 
 
