@@ -64,7 +64,7 @@ def calculate_area(surfname,fwhm, software="CIVET", subject="fsid",surf="pial",h
 subjects_dir = os.environ['SUBJECTS_DIR']
 fwhm=sys.argv[3]
 software= 'freesurfer'
-subject_id=os.path.basename(os.path.normpath(sys.argv[2]))
+subject_id=os.path.basename(os.path.normpath(subjects_dir))
 n_surfs=int(sys.argv[1])
 
 def beta(alpha, aw, ap):
@@ -85,7 +85,7 @@ def beta(alpha, aw, ap):
 
 
 for hemisphere in ("rh", "lh"):
-	wm = io.load_mesh_geometry(os.path.join(subjects_dir,"surf",hemisphere+".white"))
+	wm = io.load_mesh_geometry(os.path.join(subject_id,"surf",hemisphere+".white"))
 	gm = io.load_mesh_geometry(os.path.join(subjects_dir,subject_id,"surf",hemisphere+".pial"))
 
 	wm_vertexareas = calculate_area(os.path.join(subjects_dir,subject_id,"surf",hemisphere+".white"),fwhm,software=software,surf="white",subject=subject_id,hemi=hemisphere)
