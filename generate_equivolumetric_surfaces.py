@@ -64,7 +64,8 @@ def calculate_area(surfname,fwhm, software="CIVET", subject="fsid",surf="pial",h
 subjects_dir = os.environ['SUBJECTS_DIR']
 fwhm=sys.argv[3]
 software= 'freesurfer'
-subject_id=os.path.basename(os.path.normpath(subjects_dir))
+subject_id=os.path.basename(os.path.normpath(sys.argv[2]))
+#subject_id=os.path.basename(os.path.normpath(subjects_dir))
 n_surfs=int(sys.argv[1])
 
 def beta(alpha, aw, ap):
