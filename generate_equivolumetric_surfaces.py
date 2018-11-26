@@ -87,7 +87,7 @@ for hemisphere in ("rh", "lh"):
 	wm = io.load_mesh_geometry(os.path.join(subjects_dir,"surf",hemisphere+".white"))
 	gm = io.load_mesh_geometry(os.path.join(subjects_dir,"surf",hemisphere+".pial"))
 
-	wm_vertexareas = calculate_area(os.path.join(subjects_dir,"surf",hemisphere+".white"),fwhm,software=software,surf="white", surf="white",subject=subject_id,hemi=hemisphere)
+	wm_vertexareas = calculate_area(os.path.join(subjects_dir,"surf",hemisphere+".white"),fwhm,software=software,surf="white",subject=subject_id,hemi=hemisphere)
 	pia_vertexareas = calculate_area(os.path.join(subjects_dir,"surf",hemisphere+".pial"), fwhm,software=software,surf="pial", subject=subject_id,hemi=hemisphere)
 
 
