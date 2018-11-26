@@ -7,9 +7,7 @@ import argparse
 import os
 import copy
 import sys
-import logging
 
-logging.info('message'+sys.argv[1], sys.argv[1])
 
 def calculate_area(surfname,fwhm, software="CIVET", subject="fsid",surf="pial",hemi="lh"):
     """calculate and smooth surface area using CIVET or freesurfer"""
