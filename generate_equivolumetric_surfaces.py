@@ -111,4 +111,4 @@ for hemisphere in ("rh", "lh"):
 		#    elif software == "freesurfer":
     		#subjects_dir=os.environ['SUBJECTS_DIR']
     		tmpsurf['volume_info']=gm['volume_info']
-    		io.save_mesh_geometry(os.path.join(subjects_dir,'surf','equi_'+hemisphere+'_{N}'+'{}.pial'.format(str(float(depth)/(n_surfs-1)))),tmpsurf)
+    		io.save_mesh_geometry(os.path.join(subjects_dir,subject_id,'surf','equi_'+hemisphere+'_{N}'+'{}.pial'.format(str(float(depth)/(n_surfs-1)))),tmpsurf)
