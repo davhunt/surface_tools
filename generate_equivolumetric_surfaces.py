@@ -40,7 +40,7 @@ def calculate_area(surfname,fwhm, software="CIVET", subject="fsid",surf="pial",h
             return 0;
         try:
             subprocess.call("mris_fwhm --s " + subject + " --hemi " + hemi + " --cortex --smooth-only --fwhm " + str(fwhm) + " --i "
-                            + os.path.join(subjects_dir,subject,"surf", hemi+areafile) + " --o " + os.path.join(tmpdir,"sm_area.mgh"), shell=True)
+                            + os.path.join(subjects_dir,"surf", hemi+areafile) + " --o " + os.path.join(tmpdir,"sm_area.mgh"), shell=True)
             area=io.load_mgh(os.path.join(tmpdir,"sm_area.mgh"))
             subprocess.call("rm -r " + tmpdir, shell =True)
         except OSError:
@@ -87,8 +87,8 @@ for hemisphere in ("rh", "lh"):
 	wm = io.load_mesh_geometry(os.path.join(subjects_dir,"surf",hemisphere+".white"))
 	gm = io.load_mesh_geometry(os.path.join(subjects_dir,"surf",hemisphere+".pial"))
 
-	wm_vertexareas = calculate_area(os.path.join(subjects_dir,subject_id,"surf",hemisphere+".white"),fwhm,software=software,surf="white", subject=subject_id,hemi=hemisphere)
-	pia_vertexareas = calculate_area(os.path.join(subjects_dir,subject_id,"surf",hemisphere+".pial"), fwhm,software=software,surf="pial", subject=subject_id,hemi=hemisphere)
+	wm_vertexareas = calculate_area(os.path.join(subjects_dir,"surf",hemisphere+".white"),fwhm,software=software,surf="white", surf="white",subject=subject_id,hemi=hemisphere)
+	pia_vertexareas = calculate_area(os.path.join(subjects_dir,"surf",hemisphere+".pial"), fwhm,software=software,surf="pial", subject=subject_id,hemi=hemisphere)
 
 
 
