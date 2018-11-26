@@ -39,7 +39,7 @@ def calculate_area(surfname,fwhm, software="CIVET", subject="fsid",surf="pial",h
             print("subject id not included")
             return 0;
         try:
-            subprocess.call("mris_fwhm " + " --hemi " + hemi + " --cortex --smooth-only --fwhm " + str(fwhm) + " --i "
+            subprocess.call("mris_fwhm --s " + subject + " --hemi " + hemi + " --cortex --smooth-only --fwhm " + str(fwhm) + " --i "
                             + os.path.join(subjects_dir,"surf", hemi+areafile) + " --o " + os.path.join(tmpdir,"sm_area.mgh"), shell=True)
             area=io.load_mgh(os.path.join(tmpdir,"sm_area.mgh"))
             subprocess.call("rm -r " + tmpdir, shell =True)
@@ -107,6 +107,6 @@ for hemisphere in ("rh", "lh"):
 		#    if software == "CIVET":
 		#        io.save_mesh_geometry(args.output+'{}.obj'.format(str(float(depth)/(n_surfs-1))),tmpsurf)
 		#    elif software == "freesurfer":
-    		subjects_dir=os.environ['SUBJECTS_DIR']
+    		#subjects_dir=os.environ['SUBJECTS_DIR']
     		tmpsurf['volume_info']=gm['volume_info']
-    		io.save_mesh_geometry(os.path.join(subjects_dir,subject_id,'surf','equi_'+hemisphere+'_{N}'+'{}.pial'.format(str(float(depth)/(n_surfs-1)))),tmpsurf)
+    		io.save_mesh_geometry(os.path.join(subjects_dir,'surf','equi_'+hemisphere+'_{N}'+'{}.pial'.format(str(float(depth)/(n_surfs-1)))),tmpsurf)
