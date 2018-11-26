@@ -65,6 +65,7 @@ subjects_dir = os.environ['SUBJECTS_DIR']
 fwhm=sys.argv[3]
 software= 'freesurfer'
 subject_id=os.path.basename(os.path.normpath(sys.argv[2]))
+subject_id='output'
 #subject_id=os.path.basename(os.path.normpath(subjects_dir))
 n_surfs=int(sys.argv[1])
 
