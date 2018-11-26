@@ -9,7 +9,6 @@ import copy
 import sys
 import logging
 
-logging.info('message'+sys.argv[1], sys.argv[1])
 
 def calculate_area(surfname,fwhm, software="CIVET", subject="fsid",surf="pial",hemi="lh"):
     """calculate and smooth surface area using CIVET or freesurfer"""
@@ -88,7 +87,7 @@ for hemisphere in ("rh", "lh"):
 	wm = io.load_mesh_geometry(os.path.join(subjects_dir,subject_id,"surf",hemisphere+".white"))
 	gm = io.load_mesh_geometry(os.path.join(subjects_dir,subject_id,"surf",hemisphere+".pial"))
 
-	wm_vertexareas = calculate_area(os.path.join(subjects_dir,subject_id,"surf",hemisphere+".white"),fwhm,software=software,surf="white", subject=subject_id,hemi=hemisphere)
+	wm_vertexareas = calculate_area(os.path.join(subject_id,"surf",hemisphere+".white"),fwhm,software=software,surf="white", subject=subject_id,hemi=hemisphere)
 	pia_vertexareas = calculate_area(os.path.join(subjects_dir,subject_id,"surf",hemisphere+".pial"), fwhm,software=software,surf="pial", subject=subject_id,hemi=hemisphere)
 
 
