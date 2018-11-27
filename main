@@ -9,5 +9,6 @@ out2=$(jq -r .output config.json)
 out3=$(jq -r .smoothing config.json)
 
 export SUBJECTS_DIR=$(dirname "$out2")
+export FREESURFER_LICENSE=/usr/local/freesurfer/license.txt
 
-./generate_equivolumetric_surfaces.py "$out1" "$out2" "$out3"
+time singularity exec --writable -e docker://brainlife/freesurfer:6.0.0 bash -c "echo $FREESURFER_LICENSE > /usr/local/freesurfer/license.txt && ./generate_equivolumetric_surfaces.py "$out1" "$out2" "$out3""
