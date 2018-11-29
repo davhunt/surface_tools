@@ -8,7 +8,10 @@ out1=$(jq -r .n_surfs config.json)
 out2=$(jq -r .output config.json)
 out3=$(jq -r .smoothing config.json)
 
-export SUBJECTS_DIR=$(dirname "$out2")
-export FREESURFER_LICENSE=/usr/local/freesurfer/license.txt
+#export SUBJECTS_DIR=$(dirname "$out2")
 
-time singularity exec --writable -e docker://brainlife/freesurfer:6.0.0 bash -c "echo $FREESURFER_LICENSE > /usr/local/freesurfer/license.txt && ./generate_equivolumetric_surfaces.py "$out1" "$out2" "$out3""
+
+
+[ -z "$FREESURFER_LICENSE" ] && echo "Please set FREESURFER_LICENSE in .bashrc" && exit 1;
+
+time singularity exec --writable -e docker://brainlife/freesurfer_on_mcr:6.0.0 bash -c "echo $FREESURFER_LICENSE > /usr/local/freesurfer/license.txt && ./generate_equivolumetric_surfaces.py "$out1" "$out2" "$out3""
