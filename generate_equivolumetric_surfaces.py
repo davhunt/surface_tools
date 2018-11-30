@@ -1,6 +1,5 @@
 #!/usr/bin/env python
 
-import numpy as np
 import io_mesh as io
 import subprocess
 import argparse
