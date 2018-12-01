@@ -5,7 +5,6 @@ import subprocess
 import sys
 
 tmpdir='/tmp/' + str(sys.argv[1])
-os.mkdir(tmpdir)
 fwhm=sys.argv[4]
 subjects_dir = os.path.dirname(os.path.realpath(sys.argv[3]))
 subject_id=os.path.basename(os.path.normpath(sys.argv[3]))
