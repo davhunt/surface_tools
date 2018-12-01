@@ -49,6 +49,8 @@ def beta(alpha, aw, ap):
     else:
         return 1-(1 / (ap - aw) * (-aw + np.sqrt((1-alpha)*ap**2 + alpha*aw**2)))
 
+os.mkdir('output')
+out_dir = os.path.join(os.getcwd(),'output')
 
 for hemisphere in ("rh", "lh"):
 	#wm = io.load_mesh_geometry(os.path.join(subjects_dir,subject_id,"surf",hemisphere+".white"))
@@ -80,6 +82,6 @@ for hemisphere in ("rh", "lh"):
 		#    elif software == "freesurfer":
     		#subjects_dir=os.environ['SUBJECTS_DIR']
     		tmpsurf['volume_info']=gm['volume_info']
-    		io.save_mesh_geometry(os.path.join(subjects_dir,subject_id,'surf','equi_'+hemisphere+'_{N}'+'{}.pial'.format(str(float(depth)/(n_surfs-1)))),tmpsurf)
+    		io.save_mesh_geometry(os.path.join(out_dir,'equi_'+hemisphere+'_{N}'+'{}.pial'.format(str(float(depth)/(n_surfs-1)))),tmpsurf)
 
 subprocess.call("rm -r " + os.path.join('/tmp',str(sys.argv[4])), shell=True)
