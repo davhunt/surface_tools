@@ -1,5 +1,6 @@
 #!/usr/bin/env python
 
+import numpy as np
 import io_mesh as io
 import subprocess
 import argparse
@@ -9,44 +10,6 @@ import sys
 import logging
 
 
-def calculate_area(surfname,fwhm, software="CIVET", subject="fsid",surf="pial",hemi="lh"):
-    """calculate and smooth surface area using CIVET or freesurfer"""
-    tmpdir='/tmp/' + str(np.random.randint(1000))
-    os.mkdir(tmpdir)
-    if software == "CIVET" :
-        try:
-            subprocess.call("depth_potential -area_voronoi " + surfname + " " +os.path.join(tmpdir,"tmp_area.txt"),shell=True)
-            if fwhm ==0:
-                area=np.loadtxt(os.path.join(tmpdir,"tmp_area.txt"))
-            else:
-                subprocess.call("depth_potential -smooth " + str(fwhm) + " " + os.path.join(tmpdir,"tmp_area.txt ") + surfname + " "+os.path.join(tmpdir,"sm_area.txt"),shell=True)
-                area=np.loadtxt(os.path.join(tmpdir,"sm_area.txt"))
-            subprocess.call("rm -r "+tmpdir,shell=True)
-        except OSError:
-            print("depth_potential not found, please install CIVET tools or replace with alternative area calculation/data smoothing")
-            return 0;
-    if software == "freesurfer":
-        if surf == "white":
-            areafile=".area"
-        elif surf == "pial":
-            areafile=".area.pial"
-        if 'lh' in surfname:
-            hemi="lh"
-        else:
-            hemi="rh"
-        if subject=="fsid":
-            print("subject id not included")
-            return 0;
-        try:
-            subprocess.call("mris_fwhm --s " + subject + " --hemi " + hemi + " --cortex --smooth-only --fwhm " + str(fwhm) + " --i "
-                            + os.path.join(subjects_dir,subject,"surf", hemi+areafile) + " --o " + os.path.join(tmpdir,"sm_area.mgh"), shell=True)
-            area=io.load_mgh(os.path.join(tmpdir,"sm_area.mgh"))
-            subprocess.call("rm -r " + tmpdir, shell =True)
-        except OSError:
-            print("freesurfer tool failure, check mris_fwhm works and SUBJECTS_DIR is set")
-            return 0;
-    return area;
-   
 
 #parser = argparse.ArgumentParser(description='generate equivolumetric surfaces between input surfaces')
 #parser.add_argument('gray', type=str, help='input gray surface')
@@ -60,9 +23,10 @@ def calculate_area(surfname,fwhm, software="CIVET", subject="fsid",surf="pial",h
 
 
 #subjects_dir=sys.argv[2]
-subjects_dir = os.environ['SUBJECTS_DIR']
+#subjects_dir = os.environ['SUBJECTS_DIR']
 fwhm=sys.argv[3]
 software= 'freesurfer'
+subjects_dir = os.path.dirname(os.path.realpath(sys.argv[2]))
 subject_id=os.path.basename(os.path.normpath(sys.argv[2]))
 #subject_id=os.path.basename(os.path.normpath(subjects_dir))
 n_surfs=int(sys.argv[1])
@@ -88,9 +52,10 @@ for hemisphere in ("rh", "lh"):
 	wm = io.load_mesh_geometry(os.path.join(subjects_dir,subject_id,"surf",hemisphere+".white"))
 	gm = io.load_mesh_geometry(os.path.join(subjects_dir,subject_id,"surf",hemisphere+".pial"))
 
-	wm_vertexareas = calculate_area(os.path.join(subjects_dir,subject_id,"surf",hemisphere+".white"),fwhm,software=software,surf="white",subject=subject_id,hemi=hemisphere)
-	pia_vertexareas = calculate_area(os.path.join(subjects_dir,subject_id,"surf",hemisphere+".pial"), fwhm,software=software,surf="pial", subject=subject_id,hemi=hemisphere)
-
+	#wm_vertexareas = calculate_area(os.path.join(subjects_dir,subject_id,"surf",hemisphere+".white"),fwhm,software=software,surf="white",subject=subject_id,hemi=hemisphere)
+	#pia_vertexareas = calculate_area(os.path.join(subjects_dir,subject_id,"surf",hemisphere+".pial"), fwhm,software=software,surf="pial", subject=subject_id,hemi=hemisphere)
+	wm_vertexareas = io.load_mgh(os.path.join('/tmp',str(sys.argv[4]),'%s_white_area.mgh' %hemisphere))
+	pia_vertexareas = io.load_mgh(os.path.join('/tmp',str(sys.argv[4]),'%s_pial_area.mgh' %hemisphere))
 
 
 	vectors= wm['coords'] - gm['coords']
@@ -111,3 +76,5 @@ for hemisphere in ("rh", "lh"):
     		#subjects_dir=os.environ['SUBJECTS_DIR']
     		tmpsurf['volume_info']=gm['volume_info']
     		io.save_mesh_geometry(os.path.join(subjects_dir,subject_id,'surf','equi_'+hemisphere+'_{N}'+'{}.pial'.format(str(float(depth)/(n_surfs-1)))),tmpsurf)
+
+subprocess.call("rm -r " + os.path.join('/tmp',str(sys.argv[4])), shell=True)
