@@ -49,8 +49,8 @@ def beta(alpha, aw, ap):
     else:
         return 1-(1 / (ap - aw) * (-aw + np.sqrt((1-alpha)*ap**2 + alpha*aw**2)))
 
-os.mkdir('output')
-out_dir = os.path.join(os.getcwd(),'output')
+os.mkdir('output_surfaces')
+out_dir = os.path.join(os.getcwd(),'output_surfaces')
 
 for hemisphere in ("rh", "lh"):
 	#wm = io.load_mesh_geometry(os.path.join(subjects_dir,subject_id,"surf",hemisphere+".white"))
