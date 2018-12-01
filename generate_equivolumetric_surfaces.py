@@ -27,7 +27,8 @@ import logging
 fwhm=sys.argv[3]
 software= 'freesurfer'
 #subjects_dir = os.path.dirname(os.path.realpath(sys.argv[2]))
-subjects_dir = os.environ['SUBJECTS_DIR']
+#subjects_dir = os.environ['SUBJECTS_DIR']
+subjects_dir = '/usr/local/freesurfer/subjects'
 subject_id=os.path.basename(os.path.normpath(sys.argv[2]))
 #subject_id=os.path.basename(os.path.normpath(subjects_dir))
 n_surfs=int(sys.argv[1])
