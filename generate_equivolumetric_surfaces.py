@@ -51,9 +51,12 @@ def beta(alpha, aw, ap):
 
 
 for hemisphere in ("rh", "lh"):
-	wm = io.load_mesh_geometry(os.path.join(subjects_dir,subject_id,"surf",hemisphere+".white"))
-	gm = io.load_mesh_geometry(os.path.join(subjects_dir,subject_id,"surf",hemisphere+".pial"))
+	#wm = io.load_mesh_geometry(os.path.join(subjects_dir,subject_id,"surf",hemisphere+".white"))
+	#gm = io.load_mesh_geometry(os.path.join(subjects_dir,subject_id,"surf",hemisphere+".pial"))
 
+	wm = io.load_mesh_geometry(os.path.join('/tmp',str(sys.argv[4]),hemisphere+".white"))
+	gm = io.load_mesh_geometry(os.path.join('/tmp',str(sys.argv[4]),hemisphere+".pial"))
+	
 	#wm_vertexareas = calculate_area(os.path.join(subjects_dir,subject_id,"surf",hemisphere+".white"),fwhm,software=software,surf="white",subject=subject_id,hemi=hemisphere)
 	#pia_vertexareas = calculate_area(os.path.join(subjects_dir,subject_id,"surf",hemisphere+".pial"), fwhm,software=software,surf="pial", subject=subject_id,hemi=hemisphere)
 	wm_vertexareas = io.load_mgh(os.path.join('/tmp',str(sys.argv[4]),'%s_white_area.mgh' %hemisphere))
