@@ -18,6 +18,6 @@ mkdir /tmp/$tmpdir
 
 #cp -R $out2 $SUBJECTS_DIR
 
-time singularity exec --writable -e docker://brainlife/freesurfer:6.0.0 bash -c "echo $FREESURFER_LICENSE > /usr/local/freesurfer/license.txt && cp -R $out2 /usr/local/freesurfer && ./calculate_area.py "$tmpdir" "$out1" "$out2" "$out3""
+time singularity exec --writable -e docker://brainlife/freesurfer:6.0.0 bash -c "echo $FREESURFER_LICENSE > /usr/local/freesurfer/license.txt && cp -R $out2/output /usr/local/freesurfer && ./calculate_area.py "$tmpdir" "$out1" "$out2" "$out3""
 
 time singularity exec -e docker://brainlife/dipy:0.14 ./generate_equivolumetric_surfaces.py "$out1" "$out2" "$out3" "$tmpdir"
