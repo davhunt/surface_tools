@@ -10,7 +10,7 @@ Takes WMC datatype as input and generates n equally spaced equivolumetric surfac
 ![equivolumetric](https://raw.githubusercontent.com/kwagstyl/surface_tools/master/equivolumetric_surfaces/images/equi_euclid_surfaces.png)
 Equivolumetric surfaces (red) at 0.25, 0.5 and 0.75 cortical depth on the BigBrain. Euclidean surface (yellow) at mid depth. The euclidean surface samples different layers in gyri and sulci, while equivolumetric surfaces sample the gyri and sulci more consistently.
 
-![graph](https://github.com/kwagstyl/surface_tools/blob/master/equivolumetric_surfaces/images/intensity_profiles_euclid_equi.svg)
+![graph](https://raw.githubusercontent.com/davhunt/pictures/master/euclidean%20vs%20equivolumetric.PNG)
 Euclidean vs equivolumetric intensity sampling. The laminar peaks are better aligned using equivolumetric sampling than euclidean sampling.
 
 The code requires FreeSurfer to be installed.
