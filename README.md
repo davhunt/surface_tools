@@ -7,7 +7,7 @@ Generate equivolumetric surfaces: creates equivolumetric surfaces based on the r
 
 Takes WMC datatype as input and generates n equally spaced equivolumetric surfaces, that can then be viewed in Freesurfer.
 
-<img src="https://github.com/kwagstyl/surface_tools/blob/master/equivolumetric_surfaces/images/equi_euclid_surfaces.png" width="400">
+![equivolumetric](https://github.com/kwagstyl/surface_tools/blob/master/equivolumetric_surfaces/images/equi_euclid_surfaces.png)
 Equivolumetric surfaces (red) at 0.25, 0.5 and 0.75 cortical depth on the BigBrain. Euclidean surface (yellow) at mid depth. The euclidean surface samples different layers in gyri and sulci, while equivolumetric surfaces sample the gyri and sulci more consistently.
 
 <img src="https://github.com/kwagstyl/surface_tools/blob/master/equivolumetric_surfaces/images/intensity_profiles_euclid_equi.svg" width="500">
