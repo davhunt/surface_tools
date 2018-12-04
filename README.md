@@ -5,7 +5,7 @@
 
 Generate equivolumetric surfaces: creates equivolumetric surfaces based on the ratio of areas of the mesh surfaces, without the trouble of dealing with volumetric operations.
 
-Takes WMC datatype as input and generates n equivolumetric surfaces, that can then be viewed in Freesurfer.
+Takes WMC datatype as input and generates n equally spaced equivolumetric surfaces, that can then be viewed in Freesurfer.
 
 <img src="https://github.com/kwagstyl/surface_tools/blob/master/equivolumetric_surfaces/images/equi_euclid_surfaces.png" width="400">
 Equivolumetric surfaces (red) at 0.25, 0.5 and 0.75 cortical depth on the BigBrain. Euclidean surface (yellow) at mid depth. The euclidean surface samples different layers in gyri and sulci, while equivolumetric surfaces sample the gyri and sulci more consistently.
@@ -13,7 +13,7 @@ Equivolumetric surfaces (red) at 0.25, 0.5 and 0.75 cortical depth on the BigBra
 <img src="https://github.com/kwagstyl/surface_tools/blob/master/equivolumetric_surfaces/images/intensity_profiles_euclid_equi.svg" width="500">
 Euclidean vs equivolumetric intensity sampling. The laminar peaks are better aligned using equivolumetric sampling than euclidean sampling.
 
-The code requires FreeSurfer and nibabel to be installed.
+The code requires FreeSurfer to be installed.
 
 ### Release notes
 This code has so far been tested on:
@@ -44,7 +44,7 @@ Code is demo-ed here on the BigBrain (Amunts et al., 2013), freely available his
 
 ### On Brainlife.io
 
-You can submit this App online at [https://doi.org/10.25663/bl.app.1](https://doi.org/10.25663/bl.app.1) via the "Execute" tab.
+You can submit this App online at [https://doi.org/10.25663/brainlife.app.126](https://doi.org/10.25663/brainlife.app.126) via the "Execute" tab.
 
 ### Running Locally (on your machine)
 
