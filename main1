@@ -1,0 +1,18 @@
+#!/bin/bash
+
+#PBS -l nodes=1:ppn=1
+#PBS -l walltime=00:05:00
+
+#parse config.json for input parameters
+out1=$(jq -r .n_surfs config.json)
+out2=$(jq -r .output config.json)
+out3=$(jq -r .smoothing config.json)
+
+[ -z "$FREESURFER_LICENSE" ] && echo "Please set FREESURFER_LICENSE in .bashrc" && exit 1;
+
+tmpdir=$(( $RANDOM % 1000 ))
+mkdir /tmp/$tmpdir
+
+time singularity exec --writable -e docker://brainlife/freesurfer:6.0.0 bash -c "echo $FREESURFER_LICENSE > /usr/local/freesurfer/license.txt && SUBJECTS_DIR=$out2 ./calculate_area.py "$tmpdir" "$out1" "$out2" "$out3""
+
+time singularity exec -e docker://brainlife/dipy:0.14 ./generate_equivolumetric_surfaces.py "$out1" "$out2" "$out3" "$tmpdir"
