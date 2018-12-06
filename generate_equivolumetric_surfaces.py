@@ -9,28 +9,10 @@ import copy
 import sys
 import logging
 
-
-
-#parser = argparse.ArgumentParser(description='generate equivolumetric surfaces between input surfaces')
-#parser.add_argument('gray', type=str, help='input gray surface')
-#parser.add_argument('white', type=str, help='input white surface')
-#parser.add_argument('n_surfs', type=int, help='number of output surfaces, also returns gray and white surfaces at 0 and 1')
-#parser.add_argument('output', type=str, help='output surface prefix eg equi_left_{N}')
-#parser.add_argument('--smoothing',type=int, help='fwhm of surface area smoothing. optional, default = 0mm')
-#parser.add_argument('--software', type=str, help='surface software package CIVET or freesurfer, default is CIVET')
-#parser.add_argument('--subject_id', type=str, help='subject name if freesurfer')
-#args=parser.parse_args()
-
-
-#subjects_dir=sys.argv[2]
-#subjects_dir = os.environ['SUBJECTS_DIR']
 fwhm=sys.argv[3]
 software= 'freesurfer'
-#subjects_dir = os.path.dirname(os.path.realpath(sys.argv[2]))
-#subjects_dir = os.environ['SUBJECTS_DIR']
 subjects_dir = '/usr/local/freesurfer/subjects'
 subject_id=os.path.basename(os.path.normpath(sys.argv[2]))
-#subject_id=os.path.basename(os.path.normpath(subjects_dir))
 n_surfs=int(sys.argv[1])
 
 def beta(alpha, aw, ap):
@@ -53,23 +35,17 @@ os.mkdir('output_surfaces')
 out_dir = os.path.join(os.getcwd(),'output_surfaces')
 
 for hemisphere in ("rh", "lh"):
-	#wm = io.load_mesh_geometry(os.path.join(subjects_dir,subject_id,"surf",hemisphere+".white"))
-	#gm = io.load_mesh_geometry(os.path.join(subjects_dir,subject_id,"surf",hemisphere+".pial"))
 
 	wm = io.load_mesh_geometry(os.path.join('/tmp',str(sys.argv[4]),hemisphere+".white"))
 	gm = io.load_mesh_geometry(os.path.join('/tmp',str(sys.argv[4]),hemisphere+".pial"))
-	
-	#wm_vertexareas = calculate_area(os.path.join(subjects_dir,subject_id,"surf",hemisphere+".white"),fwhm,software=software,surf="white",subject=subject_id,hemi=hemisphere)
-	#pia_vertexareas = calculate_area(os.path.join(subjects_dir,subject_id,"surf",hemisphere+".pial"), fwhm,software=software,surf="pial", subject=subject_id,hemi=hemisphere)
+
 	wm_vertexareas = io.load_mgh(os.path.join('/tmp',str(sys.argv[4]),'%s_white_area.mgh' %hemisphere))
 	pia_vertexareas = io.load_mgh(os.path.join('/tmp',str(sys.argv[4]),'%s_pial_area.mgh' %hemisphere))
-
 
 	vectors= wm['coords'] - gm['coords']
 	tmpsurf= copy.deepcopy(gm)
 	#create mask where vertex coordinates match
 	mask = vectors.sum(axis=1)!=0
-
 
 	#number of equally space intracortical surfaces (eg 5 is 0, 0.25, 0.5, 0.75, and 1)
 	for depth in range(n_surfs):
@@ -77,10 +53,6 @@ for hemisphere in ("rh", "lh"):
     		betas = beta(float(depth)/(n_surfs-1), wm_vertexareas[mask], pia_vertexareas[mask])
     		betas = np.nan_to_num(betas)
     		tmpsurf['coords'][mask] = gm['coords'][mask] + vectors[mask]* np.array([betas]).T
-		#    if software == "CIVET":
-		#        io.save_mesh_geometry(args.output+'{}.obj'.format(str(float(depth)/(n_surfs-1))),tmpsurf)
-		#    elif software == "freesurfer":
-    		#subjects_dir=os.environ['SUBJECTS_DIR']
     		tmpsurf['volume_info']=gm['volume_info']
     		io.save_mesh_geometry(os.path.join(out_dir,'equi_'+hemisphere+'_{N}'+'{}.pial'.format(str(float(depth)/(n_surfs-1)))),tmpsurf)
 
