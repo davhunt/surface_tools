@@ -5,7 +5,9 @@
 
 Generate equivolumetric surfaces: creates equivolumetric surfaces based on the ratio of areas of the mesh surfaces, without the trouble of dealing with volumetric operations.
 
-Takes WMC datatype as input and generates n equally spaced equivolumetric surfaces, that can then be viewed in Freesurfer.
+Takes WMC datatype as input and generates n equally spaced equivolumetric surfaces, that can then be viewed in Freesurfer. (i.e. n_surfs = 5 will generate the pial and white matter surfaces as well as 3 equally spaced intermediate surfaces)
+
+The smoothing or "diffusion smoothing" value (fwhm, Full Width at Half Maximum of the Gaussian, in mm, default 0) determines the extent to which the surfaces are smoothed (e.g. sharp jumps in neighboring data points on the surfaces will be smoothed out, generally increasing the signal-to-noise ratio)
 
 ![equivolumetric](https://raw.githubusercontent.com/kwagstyl/surface_tools/master/equivolumetric_surfaces/images/equi_euclid_surfaces.png)
 Equivolumetric surfaces (red) at 0.25, 0.5 and 0.75 cortical depth on the BigBrain. Euclidean surface (yellow) at mid depth. The euclidean surface samples different layers in gyri and sulci, while equivolumetric surfaces sample the gyri and sulci more consistently.
