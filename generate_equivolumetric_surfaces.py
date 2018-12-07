@@ -3,15 +3,10 @@
 import numpy as np
 import io_mesh as io
 import subprocess
-import argparse
 import os
 import copy
 import sys
-import logging
 
-software= 'freesurfer'
-subjects_dir = '/usr/local/freesurfer/subjects'
-subject_id=os.path.basename(os.path.normpath(sys.argv[2]))
 n_surfs=int(sys.argv[1])
 
 def beta(alpha, aw, ap):
@@ -35,11 +30,11 @@ out_dir = os.path.join(os.getcwd(),'output_surfaces')
 
 for hemisphere in ("rh", "lh"):
 
-	wm = io.load_mesh_geometry(os.path.join('/tmp',str(sys.argv[3]),hemisphere+".white"))
-	gm = io.load_mesh_geometry(os.path.join('/tmp',str(sys.argv[3]),hemisphere+".pial"))
+	wm = io.load_mesh_geometry(os.path.join('/tmp',str(sys.argv[2]),hemisphere+".white"))
+	gm = io.load_mesh_geometry(os.path.join('/tmp',str(sys.argv[2]),hemisphere+".pial"))
 
-	wm_vertexareas = io.load_mgh(os.path.join('/tmp',str(sys.argv[3]),'%s_white_area.mgh' %hemisphere))
-	pia_vertexareas = io.load_mgh(os.path.join('/tmp',str(sys.argv[3]),'%s_pial_area.mgh' %hemisphere))
+	wm_vertexareas = io.load_mgh(os.path.join('/tmp',str(sys.argv[2]),'%s_white_area.mgh' %hemisphere))
+	pia_vertexareas = io.load_mgh(os.path.join('/tmp',str(sys.argv[2]),'%s_pial_area.mgh' %hemisphere))
 
 	vectors= wm['coords'] - gm['coords']
 	tmpsurf= copy.deepcopy(gm)
@@ -55,4 +50,4 @@ for hemisphere in ("rh", "lh"):
     		tmpsurf['volume_info']=gm['volume_info']
     		io.save_mesh_geometry(os.path.join(out_dir,'equi_'+hemisphere+'_{N}'+'{}.pial'.format(str(float(depth)/(n_surfs-1)))),tmpsurf)
 
-subprocess.call("rm -r " + os.path.join('/tmp',str(sys.argv[3])), shell=True)
+subprocess.call("rm -r " + os.path.join('/tmp',str(sys.argv[2])), shell=True)
