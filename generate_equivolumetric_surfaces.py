@@ -55,4 +55,4 @@ for hemisphere in ("rh", "lh"):
     		tmpsurf['volume_info']=gm['volume_info']
     		io.save_mesh_geometry(os.path.join(out_dir,'equi_'+hemisphere+'_{N}'+'{}.pial'.format(str(float(depth)/(n_surfs-1)))),tmpsurf)
 
-subprocess.call("rm -r " + os.path.join('/tmp',str(sys.argv[4])), shell=True)
+subprocess.call("rm -r " + os.path.join('/tmp',str(sys.argv[3])), shell=True)
