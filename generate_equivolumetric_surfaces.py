@@ -9,7 +9,6 @@ import copy
 import sys
 import logging
 
-fwhm=sys.argv[3]
 software= 'freesurfer'
 subjects_dir = '/usr/local/freesurfer/subjects'
 subject_id=os.path.basename(os.path.normpath(sys.argv[2]))
@@ -36,11 +35,11 @@ out_dir = os.path.join(os.getcwd(),'output_surfaces')
 
 for hemisphere in ("rh", "lh"):
 
-	wm = io.load_mesh_geometry(os.path.join('/tmp',str(sys.argv[4]),hemisphere+".white"))
-	gm = io.load_mesh_geometry(os.path.join('/tmp',str(sys.argv[4]),hemisphere+".pial"))
+	wm = io.load_mesh_geometry(os.path.join('/tmp',str(sys.argv[3]),hemisphere+".white"))
+	gm = io.load_mesh_geometry(os.path.join('/tmp',str(sys.argv[3]),hemisphere+".pial"))
 
-	wm_vertexareas = io.load_mgh(os.path.join('/tmp',str(sys.argv[4]),'%s_white_area.mgh' %hemisphere))
-	pia_vertexareas = io.load_mgh(os.path.join('/tmp',str(sys.argv[4]),'%s_pial_area.mgh' %hemisphere))
+	wm_vertexareas = io.load_mgh(os.path.join('/tmp',str(sys.argv[3]),'%s_white_area.mgh' %hemisphere))
+	pia_vertexareas = io.load_mgh(os.path.join('/tmp',str(sys.argv[3]),'%s_pial_area.mgh' %hemisphere))
 
 	vectors= wm['coords'] - gm['coords']
 	tmpsurf= copy.deepcopy(gm)
