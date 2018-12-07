@@ -14,6 +14,6 @@ tmpdir=$(( $RANDOM % 1000 ))
 mkdir /tmp/$tmpdir
 SUBJ_DIR="$(dirname "$out2")"
 
-time singularity exec --writable -e docker://brainlife/freesurfer:6.0.0 bash -c "echo $FREESURFER_LICENSE > /usr/local/freesurfer/license.txt && SUBJECTS_DIR=$SUBJ_DIR ./calculate_area1.py "$tmpdir" "$out1" "$out2" "$out3""
+time singularity exec --writable -e docker://brainlife/freesurfer:6.0.0 bash -c "echo $FREESURFER_LICENSE > /usr/local/freesurfer/license.txt && SUBJECTS_DIR=$SUBJ_DIR ./calculate_area.py "$tmpdir" "$out2" "$out3""
 
 time singularity exec -e docker://brainlife/dipy:0.14 ./generate_equivolumetric_surfaces.py "$out1" "$tmpdir"

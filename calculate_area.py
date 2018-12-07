@@ -5,10 +5,9 @@ import subprocess
 import sys
 
 tmpdir='/tmp/' + str(sys.argv[1])
-fwhm=sys.argv[4]
-subjects_dir = os.path.dirname(os.path.realpath(sys.argv[3]))
-subject_id=os.path.basename(os.path.normpath(sys.argv[3]))
-n_surfs=int(sys.argv[2])
+fwhm=sys.argv[3]
+subjects_dir = os.environ['SUBJECTS_DIR']
+subject_id=os.path.basename(os.path.normpath(sys.argv[2]))
 
 for hemisphere in ("rh", "lh"):
 	for areafile in (".area", ".area.pial"):
