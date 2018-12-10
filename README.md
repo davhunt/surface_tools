@@ -57,7 +57,7 @@ You can submit this App online at [https://doi.org/10.25663/brainlife.app.126](h
 {
         "n_surfs": 5,
         "output": "./input/freesurfer/output",
-        "smoothing": 0.1
+        "smoothing": 5
 }
 
 3. Launch the App by executing `main`
@@ -85,8 +85,7 @@ All output files will be generated under the current working directory (pwd). Th
 
 This App only requires [singularity](https://www.sylabs.io/singularity/) to run. If you don't have singularity, you will need to install following dependencies.  
 
-  - Matlab: https://www.mathworks.com/products/matlab.html
+  - Freesurfer: https://surfer.nmr.mgh.harvard.edu/
   - jsonlab: https://www.mathworks.com/matlabcentral/fileexchange/33381-jsonlab-a-toolbox-to-encode-decode-json-files
-  - VISTASOFT: https://github.com/vistalab/vistasoft/
-  - ENCODE: https://github.com/brain-life/encode
-  - MBA: https://github.com/francopestilli/mba
+  - NIBABEL: https://github.com/nipy/nibabel
+  - NUMPY: https://github.com/numpy/numpy
