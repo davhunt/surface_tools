@@ -12,8 +12,9 @@ out3=$(jq -r .smoothing config.json)
 
 tmpdir=$(( $RANDOM % 1000 ))
 mkdir /tmp/$tmpdir
-SUBJ_DIR="$(dirname "$out2")"
+export SUBJECTS_DIR="$(dirname "$out2")"
+echo $FREESURFER_LICENSE > license.txt
 
-time singularity exec --writable -e docker://brainlife/freesurfer:6.0.0 bash -c "echo $FREESURFER_LICENSE > /usr/local/freesurfer/license.txt && SUBJECTS_DIR=$SUBJ_DIR ./calculate_area.py "$tmpdir" "$out2" "$out3""
+time singularity exec -e -B `pwd`/license.txt:/usr/local/freesurfer/license.txt docker://brainlife/freesurfer:6.0.0 ./calculate_area.py "$tmpdir" "$out2" "$out3"
 
 time singularity exec -e docker://brainlife/dipy:0.14 ./generate_equivolumetric_surfaces.py "$out1" "$tmpdir"
