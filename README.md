@@ -1,5 +1,5 @@
 [![Abcdspec-compliant](https://img.shields.io/badge/ABCD_Spec-v1.1-green.svg)](https://github.com/brain-life/abcd-spec)
-[![Run on Brainlife.io](https://img.shields.io/badge/Brainlife-bl.app.126-blue.svg)](https://doi.org/10.25663/brainlife.app.126)
+[![Run on Brainlife.io](https://img.shields.io/badge/Brainlife-brainlife.app.126-blue.svg)](https://doi.org/10.25663/brainlife.app.126)
 
 # Surface tools
 
