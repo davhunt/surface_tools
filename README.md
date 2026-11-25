@@ -3,6 +3,49 @@
 
 # Surface tools
 
+<!-- brainlife-app:begin (generated from the App manifest; edit the manifest, not this block) -->
+
+> **Generates n equivolumetric intracortical surfaces between the FreeSurfer white and pial surfaces of each hemisphere, using vertex-area ratios, for laminar sampling.**
+
+Smooths the white and pial vertex-area maps with FreeSurfer mris_fwhm, then builds n_surfs surfaces from white to pial whose depth follows the equivolumetric model of Waehnert et al. (2014), so the same cortical layers are sampled in gyri and sulci. Use it for laminar or depth-dependent analyses of cortical data. It needs a FreeSurfer subject directory with white and pial surfaces and area files.
+
+| | |
+|---|---|
+| 📥 **Inputs** | `neuro/freesurfer` |
+| 📤 **Outputs** | `raw` |
+| 🐳 **Container** | `brainlife/freesurfer:6.0.0` |
+| ⚙️ **Resources** | 1 CPUs |
+| 🔑 **Requires** | `FREESURFER_LICENSE` |
+| 🔗 **Run it** | [doi.org/10.25663/brainlife.app.126](https://doi.org/10.25663/brainlife.app.126) |
+
+#### 📥 Inputs
+
+| Input | Datatype | Required | Description |
+|---|---|---|---|
+| `freesurfer` | `neuro/freesurfer` | yes | FreeSurfer subject directory (recon-all output). Must contain surf/?h.white, ?h.pial, ?h.area and ?h.area.pial for both hemispheres. |
+
+#### 📤 Outputs
+
+| Output | Datatype | Description |
+|---|---|---|
+| `output_surfaces` | `raw` | FreeSurfer-format surfaces for each hemisphere at evenly spaced equivolumetric depths from white (0) to pial (1), named equi_<hemi>_{N}<depth>.pial. |
+
+<details>
+<summary><b>⚙️ Parameters</b> (2)</summary>
+
+| Parameter | Type | Default | Description |
+|---|---|---|---|
+| `smoothing` | number | `0` | fwhm value for smoothing |
+| `n_surfs` | number | `5` | Number of surfaces to generate, including the white and pial boundaries (e.g. 5 gives depths 0, 0.25, 0.5, 0.75, 1). |
+
+</details>
+
+📚 **References used by this App:**
+- Waehnert MD, et al. Anatomically motivated modeling of cortical laminae. NeuroImage (2014). [doi:10.1016/j.neuroimage.2013.03.078](https://doi.org/10.1016/j.neuroimage.2013.03.078)
+- Avesani P, et al. The open diffusion data derivatives, brain data upcycling via integrated publishing of derivatives and reproducible open cloud services. Sci Data 6:69 (2019). [doi:10.1038/s41597-019-0073-y](https://doi.org/10.1038/s41597-019-0073-y)
+
+<!-- brainlife-app:end -->
+
 Generate equivolumetric surfaces: creates equivolumetric surfaces based on the ratio of areas of the mesh surfaces, without the trouble of dealing with volumetric operations.
 
 Takes WMC datatype as input and generates n equally spaced equivolumetric surfaces, that can then be viewed in Freesurfer. (i.e. n_surfs = 5 will generate the pial and white matter surfaces as well as 3 equally spaced intermediate surfaces)
