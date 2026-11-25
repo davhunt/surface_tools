@@ -1,7 +1,16 @@
-[![Abcdspec-compliant](https://img.shields.io/badge/ABCD_Spec-v1.1-green.svg)](https://github.com/brain-life/abcd-spec)
-[![Run on Brainlife.io](https://img.shields.io/badge/Brainlife-brainlife.app.126-blue.svg)](https://doi.org/10.25663/brainlife.app.126)
+<h1 align="center">Generate Equivolumetric Surfaces</h1>
 
-# Surface tools
+<p align="center">
+  Generates n equivolumetric intracortical surfaces between the FreeSurfer white and pial surfaces of each hemisphere, using vertex-area ratios, for laminar sampling.
+</p>
+
+<p align="center">
+  <a href="https://github.com/brainlife/abcd-spec"><img src="https://img.shields.io/badge/ABCD_Spec-v1.1-green.svg" alt="ABCD Spec v1.1"></a>
+  <a href="https://doi.org/10.25663/brainlife.app.126"><img src="https://img.shields.io/badge/Brainlife-brainlife.app.126-blue.svg" alt="Run on brainlife.io"></a>
+  <a href="LICENSE"><img src="https://img.shields.io/badge/License-see_LICENSE-lightgrey.svg" alt="License"></a>
+</p>
+
+## At a glance
 
 <!-- brainlife-app:begin (generated from the App manifest; edit the manifest, not this block) -->
 
@@ -11,27 +20,27 @@ Smooths the white and pial vertex-area maps with FreeSurfer mris_fwhm, then buil
 
 | | |
 |---|---|
-| 📥 **Inputs** | `neuro/freesurfer` |
-| 📤 **Outputs** | `raw` |
-| 🐳 **Container** | `brainlife/freesurfer:6.0.0` |
-| ⚙️ **Resources** | 1 CPUs |
-| 🔑 **Requires** | `FREESURFER_LICENSE` |
-| 🔗 **Run it** | [doi.org/10.25663/brainlife.app.126](https://doi.org/10.25663/brainlife.app.126) |
+| **Inputs** | `neuro/freesurfer` |
+| **Outputs** | `raw` |
+| **Container** | `brainlife/freesurfer:6.0.0` |
+| **Resources** | 1 CPUs |
+| **Requires** | `FREESURFER_LICENSE` |
+| **Run it** | [doi.org/10.25663/brainlife.app.126](https://doi.org/10.25663/brainlife.app.126) |
 
-#### 📥 Inputs
+#### Inputs
 
 | Input | Datatype | Required | Description |
 |---|---|---|---|
 | `freesurfer` | `neuro/freesurfer` | yes | FreeSurfer subject directory (recon-all output). Must contain surf/?h.white, ?h.pial, ?h.area and ?h.area.pial for both hemispheres. |
 
-#### 📤 Outputs
+#### Outputs
 
 | Output | Datatype | Description |
 |---|---|---|
 | `output_surfaces` | `raw` | FreeSurfer-format surfaces for each hemisphere at evenly spaced equivolumetric depths from white (0) to pial (1), named equi_<hemi>_{N}<depth>.pial. |
 
 <details>
-<summary><b>⚙️ Parameters</b> (2)</summary>
+<summary><b>Parameters</b> (2)</summary>
 
 | Parameter | Type | Default | Description |
 |---|---|---|---|
@@ -40,107 +49,78 @@ Smooths the white and pial vertex-area maps with FreeSurfer mris_fwhm, then buil
 
 </details>
 
-📚 **References used by this App:**
-- Waehnert MD, et al. Anatomically motivated modeling of cortical laminae. NeuroImage (2014). [doi:10.1016/j.neuroimage.2013.03.078](https://doi.org/10.1016/j.neuroimage.2013.03.078)
-- Avesani P, et al. The open diffusion data derivatives, brain data upcycling via integrated publishing of derivatives and reproducible open cloud services. Sci Data 6:69 (2019). [doi:10.1038/s41597-019-0073-y](https://doi.org/10.1038/s41597-019-0073-y)
-
 <!-- brainlife-app:end -->
 
-Generate equivolumetric surfaces: creates equivolumetric surfaces based on the ratio of areas of the mesh surfaces, without the trouble of dealing with volumetric operations.
+## Running the App
 
-Takes WMC datatype as input and generates n equally spaced equivolumetric surfaces, that can then be viewed in Freesurfer. (i.e. n_surfs = 5 will generate the pial and white matter surfaces as well as 3 equally spaced intermediate surfaces)
+### On brainlife.io
 
-The smoothing or "diffusion smoothing" value (fwhm, Full Width at Half Maximum of the Gaussian, in mm, default 0) determines the extent to which the surfaces are smoothed (e.g. sharp jumps in neighboring data points on the surfaces will be smoothed out, generally increasing the signal-to-noise ratio)
+Open the App at [doi.org/10.25663/brainlife.app.126](https://doi.org/10.25663/brainlife.app.126), choose `neuro/freesurfer` from your project, set the parameters and press **Execute**. The results are saved to your project as `raw`.
 
-![equivolumetric](https://raw.githubusercontent.com/kwagstyl/surface_tools/master/equivolumetric_surfaces/images/equi_euclid_surfaces.png)
-Equivolumetric surfaces (red) at 0.25, 0.5 and 0.75 cortical depth on the BigBrain. Euclidean surface (yellow) at mid depth. The euclidean surface samples different layers in gyri and sulci, while equivolumetric surfaces sample the gyri and sulci more consistently.
+### Locally
 
-![graph](https://raw.githubusercontent.com/davhunt/pictures/master/euclidean%20vs%20equivolumetric.PNG)
-Euclidean vs equivolumetric intensity sampling. The laminar peaks are better aligned using equivolumetric sampling than euclidean sampling.
+You need [Singularity/Apptainer](https://apptainer.org/) (the App runs in `brainlife/freesurfer:6.0.0`), [`jq`](https://jqlang.github.io/jq/), `FREESURFER_LICENSE`.
 
-The code requires FreeSurfer to be installed.
+1. Clone this repository.
+2. Create `config.json` with the paths to your inputs and the parameters:
 
-### Release notes
+   ```json
+   {
+       "output": "/path/to/freesurfer/output",
+       "smoothing": 0,
+       "n_surfs": 5
+   }
+   ```
+
+3. Run `./main`.
+
+## Troubleshooting
+
+- **Please set FREESURFER_LICENSE in .bashrc**: Set FREESURFER_LICENSE in the execution environment.
+
+## Release notes
+
 This code has so far been tested on:
 - python 2.7 and 3.6, freesurfer v.6 and on linux (Ubuntu 16.04) and macOS (10.12.6)
 
-### Authors
-- Konrad Wagstyl (kw350@cam.ac.uk)
-- David Hunt (davhunt@indiana.edu)
+## Citing
 
-### Project director
-- Franco Pestilli (franpest@indiana.edu)
+If you use this App, please cite it, the software it builds on and brainlife.io:
 
-### Acknowledgements:
-Written by [Konrad Wagstyl](https://github.com/kwagstyl/surface_tools) and Alexander Huth at a Brain Hack, a version is also available in Pyrocortex.
-Casey Paquola and Richard Bethlehem were involved in piloting these scripts on CIVET and FreeSurfer respectively.
+- Generate Equivolumetric Surfaces. brainlife.io App. [doi:10.25663/brainlife.app.126](https://doi.org/10.25663/brainlife.app.126)
+- Waehnert MD, et al. Anatomically motivated modeling of cortical laminae. NeuroImage (2014). [doi:10.1016/j.neuroimage.2013.03.078](https://doi.org/10.1016/j.neuroimage.2013.03.078)
+- Fischl. FreeSurfer. *NeuroImage* 62:774-781 (2012). [doi:10.1016/j.neuroimage.2012.01.021](https://doi.org/10.1016/j.neuroimage.2012.01.021)
+- Hayashi S, Caron BA, Heinsfeld AS, et al. brainlife.io: a decentralized and open-source cloud platform to support neuroscience research. *Nature Methods* 21:809–813 (2024). [doi:10.1038/s41592-024-02237-2](https://doi.org/10.1038/s41592-024-02237-2)
+- Avesani P, McPherson B, Hayashi S, et al. The open diffusion data derivatives, brain data upcycling via integrated publishing of derivatives and reproducible open cloud services. *Scientific Data* 6:69 (2019). [doi:10.1038/s41597-019-0073-y](https://doi.org/10.1038/s41597-019-0073-y)
 
-The io_mesh code was copied and adapted from https://github.com/juhuntenburg/laminar_python, another great tool for doing volume-based equivolumetric laminar processing.
+## Authors
 
-The equations for generating equivolumetric surfaces come from Waehnert et al 2014: "Anatomically motivated modeling of cortical laminae" https://doi.org/10.1016/j.neuroimage.2013.03.078
+- Konrad Wagstyl
+- David Hunt
 
-Code is demo-ed here on the BigBrain (Amunts et al., 2013), freely available histological atlas of the human brain https://bigbrain.loris.ca/
+**Project director**
 
-### Funding Acknowledgment
-brainlife.io is publicly funded and for the sustainability of the project it is helpful to Acknowledge the use of the platform. We kindly ask that you acknowledge the funding below in your publications and code reusing this code.
+- Franco Pestilli
 
-[![NSF-BCS-1734853](https://img.shields.io/badge/NSF_BCS-1734853-blue.svg)](https://nsf.gov/awardsearch/showAward?AWD_ID=1734853)
-[![NSF-BCS-1636893](https://img.shields.io/badge/NSF_BCS-1636893-blue.svg)](https://nsf.gov/awardsearch/showAward?AWD_ID=1636893)
-[![NSF-ACI-1916518](https://img.shields.io/badge/NSF_ACI-1916518-blue.svg)](https://nsf.gov/awardsearch/showAward?AWD_ID=1916518)
-[![NSF-IIS-1912270](https://img.shields.io/badge/NSF_IIS-1912270-blue.svg)](https://nsf.gov/awardsearch/showAward?AWD_ID=1912270)
-[![NIH-NIBIB-R01EB029272](https://img.shields.io/badge/NIH_NIBIB-R01EB029272-green.svg)](https://grantome.com/grant/NIH/R01-EB029272-01)
+## Funding
 
-### Citations
-We kindly ask that you cite the following articles when publishing papers and code using this code. 
+[![Wellcome-226486/Z/22/Z](https://img.shields.io/badge/Wellcome-226486%2FZ%2F22%2FZ-purple.svg)](https://wellcome.org/)
+[![NIH-NINDS-U24NS140384](https://img.shields.io/badge/NIH_NINDS-U24NS140384-green.svg)](https://reporter.nih.gov/project-details/11261037)
+[![NIH-NINDS-UM1NS132207](https://img.shields.io/badge/NIH_NINDS-UM1NS132207-green.svg)](https://reporter.nih.gov/project-details/11411328)
+[![NIH-NIBIB-R01EB029272](https://img.shields.io/badge/NIH_NIBIB-R01EB029272-green.svg)](https://reporter.nih.gov/project-details/10262925)
+[![NIH-NIBIB-R01EB030896](https://img.shields.io/badge/NIH_NIBIB-R01EB030896-green.svg)](https://reporter.nih.gov/project-details/10428625)
+[![NIH-NIMH-R01MH126699](https://img.shields.io/badge/NIH_NIMH-R01MH126699-green.svg)](https://reporter.nih.gov/project-details/10460628)
+[![NIH-NIDCD-R01DC020088](https://img.shields.io/badge/NIH_NIDCD-R01DC020088-green.svg)](https://reporter.nih.gov/project-details/11140284)
+[![NSF-BCS-1734853](https://img.shields.io/badge/NSF_BCS-1734853-blue.svg)](https://www.nsf.gov/awardsearch/showAward?AWD_ID=1734853)
+[![NSF-BCS-2203524](https://img.shields.io/badge/NSF_BCS-2203524-blue.svg)](https://www.nsf.gov/awardsearch/showAward?AWD_ID=2203524)
+[![NSF-IIS-1636893](https://img.shields.io/badge/NSF_IIS-1636893-blue.svg)](https://www.nsf.gov/awardsearch/showAward?AWD_ID=1636893)
+[![NSF-OAC-2148729](https://img.shields.io/badge/NSF_OAC-2148729-blue.svg)](https://www.nsf.gov/awardsearch/showAward?AWD_ID=2148729)
+[![NSF-IIS-1912270](https://img.shields.io/badge/NSF_IIS-1912270-blue.svg)](https://www.nsf.gov/awardsearch/showAward?AWD_ID=1912270)
+[![NSF-IIS-2148700](https://img.shields.io/badge/NSF_IIS-2148700-blue.svg)](https://www.nsf.gov/awardsearch/showAward?AWD_ID=2148700)
+[![NSF-OAC-1916518](https://img.shields.io/badge/NSF_OAC-1916518-blue.svg)](https://www.nsf.gov/awardsearch/showAward?AWD_ID=1916518)
 
-1. Avesani, P., McPherson, B., Hayashi, S. et al. The open diffusion data derivatives, brain data upcycling via integrated publishing of derivatives and reproducible open cloud services. Sci Data 6, 69 (2019). [https://doi.org/10.1038/s41597-019-0073-y](https://doi.org/10.1038/s41597-019-0073-y)
+<sub>brainlife.io, which runs this App, is publicly funded by Wellcome, the U.S. National Institutes of Health and the U.S. National Science Foundation; acknowledging that support helps keep it running.</sub>
 
-#### MIT Copyright (c) 2020 brainlife.io The University of Texas at Austin and Indiana University
+## License
 
-## Running the App 
-
-### On Brainlife.io
-
-You can submit this App online at [https://doi.org/10.25663/brainlife.app.126](https://doi.org/10.25663/brainlife.app.126) via the "Execute" tab.
-
-### Running Locally (on your machine)
-
-1. git clone this repo.
-2. Inside the cloned directory, create `config.json` with something like the following content with paths to your input files.
-
-```json
-{
-        "n_surfs": 5,
-        "output": "./input/freesurfer/output",
-        "smoothing": 5
-}
-
-3. Launch the App by executing `main`
-
-```bash
-./main
-```
-
-### Sample Datasets
-
-If you don't have your own input file, you can download sample datasets from Brainlife.io, or you can use [Brainlife CLI](https://github.com/brain-life/cli).
-
-```
-npm install -g brainlife
-bl login
-mkdir input
-bl dataset download 5a0662225ab38300be518f53 && mv 5a0662225ab38300be518f53 input/freesurfer
-```
-
-## Output
-
-All output files will be generated under the current working directory (pwd). The main output of this App is a directory called `output_surfaces`. This file contains the 2n (rh and lh) generated equivolumetric surfaces (*.pial).
-
-### Dependencies
-
-This App only requires [singularity](https://www.sylabs.io/singularity/) to run. If you don't have singularity, you will need to install following dependencies.  
-
-  - Freesurfer: https://surfer.nmr.mgh.harvard.edu/
-  - jsonlab: https://www.mathworks.com/matlabcentral/fileexchange/33381-jsonlab-a-toolbox-to-encode-decode-json-files
-  - NIBABEL: https://github.com/nipy/nibabel
-  - NUMPY: https://github.com/numpy/numpy
+See [LICENSE](LICENSE).
